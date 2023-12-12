@@ -33,22 +33,22 @@ function crear_tabla() {
         PRIMARY KEY (id)
     ) $charset_collate;";
 
+    // Incluir a función dbDelta para crear/modificar táboas na base de datos
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $sql );
 }
 register_activation_hook( __FILE__, 'crear_tabla');
 
-// Función para insertar datos en la tabla
-// ... Código previo del plugin
-
-// Función para insertar datos en la tabla
+// Función para insertar datos na tabla
 function insertardatos($palabras1, $palabras2) {
     global $wpdb;
     $tabla = $wpdb->prefix . 'examen';
 
+    // Bucle para inserir datos baseados nos arrays proporcionados
     for ($i = 0; $i < count($palabras1); $i++) {
         $palabrafinal = $palabras1[$i] . $palabras2[$i];
 
+        // Inserción dos datos na táboa
         $wpdb->insert(
             $tabla,
             array(
@@ -60,19 +60,21 @@ function insertardatos($palabras1, $palabras2) {
     }
 }
 
-// Insertar datos al activar el plugin (pasando los arrays como argumentos)
+// Inserir datos ao activar o plugin (pasando os arrays como argumentos)
 register_activation_hook( __FILE__, function() use ($palabras1, $palabras2) {
     insertardatos($palabras1, $palabras2);
 });
 
-// Función para mostrar datos en el contenido de la publicación
+// Función para mostrar datos no contenido da publicación
 function mostrar_datos_contenido($content) {
     global $wpdb;
     $tabla = $wpdb->prefix . 'examen';
 
+    // Consultar datos da táboa
     $result = $wpdb->get_results("SELECT * FROM $tabla");
 
     if ($result) {
+        // Xerar o HTML coa lista das palabras compostas
         $content .= '<h2>Palabras compostas</h2>';
         $content .= '<ul>';
         foreach ($result as $row) {
@@ -85,14 +87,16 @@ function mostrar_datos_contenido($content) {
 }
 add_filter('the_content', 'mostrar_datos_contenido');
 
-// Función para mostrar datos en el título de la publicación
+// Función para mostrar datos no título da publicación
 function mostrar_datos_title($title) {
     global $wpdb;
     $tabla = $wpdb->prefix . 'examen';
 
+    // Obter o primeiro dato da táboa
     $result = $wpdb->get_results("SELECT * FROM $tabla LIMIT 1");
 
     if ($result) {
+        // Engadir o dato da palabra composta ao título
         $title .= ' - Compostas: ';
         $title .= $result[0]->palabra_composta;
     }
