@@ -85,4 +85,18 @@ function mostrar_datos_contenido($content) {
 }
 add_filter('the_content', 'mostrar_datos_contenido');
 
+// Función para mostrar datos en el título de la publicación
+function mostrar_datos_title($title) {
+    global $wpdb;
+    $tabla = $wpdb->prefix . 'examen';
 
+    $result = $wpdb->get_results("SELECT * FROM $tabla LIMIT 1");
+
+    if ($result) {
+        $title .= ' - Compostas: ';
+        $title .= $result[0]->palabra_composta;
+    }
+
+    return $title;
+}
+add_filter('the_title', 'mostrar_datos_title');
