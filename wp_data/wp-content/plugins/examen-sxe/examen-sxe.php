@@ -65,4 +65,24 @@ register_activation_hook( __FILE__, function() use ($palabras1, $palabras2) {
     insertardatos($palabras1, $palabras2);
 });
 
+// Función para mostrar datos en el contenido de la publicación
+function mostrar_datos_contenido($content) {
+    global $wpdb;
+    $tabla = $wpdb->prefix . 'examen';
+
+    $result = $wpdb->get_results("SELECT * FROM $tabla");
+
+    if ($result) {
+        $content .= '<h2>Palabras compostas</h2>';
+        $content .= '<ul>';
+        foreach ($result as $row) {
+            $content .= '<li>' . $row->palabra_composta . '</li>';
+        }
+        $content .= '</ul>';
+    }
+
+    return $content;
+}
+add_filter('the_content', 'mostrar_datos_contenido');
+
 
