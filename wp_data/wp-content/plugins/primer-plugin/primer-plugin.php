@@ -20,3 +20,11 @@ $palabras2 = array(
     "malcriado"
 );
 
+function cambia_soez_por_eufemismo($text)
+{
+    global $palabras1, $palabras2;
+    return str_replace($palabras1, $palabras2, $text);
+}
+
+add_filter('the_content', 'cambia_soez_por_eufemismo');
+
